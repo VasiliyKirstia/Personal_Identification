@@ -7,13 +7,19 @@ __author__ = 'vasiliy'
 
 
 import sqlite3
-from models import Unit, KEY_PRESS_UNIT_TYPE,KEY_RELEASE_UNIT_TYPE
+from models import Unit, KEY_PRESS_UNIT_TYPE, KEY_RELEASE_UNIT_TYPE
 
 class Provider():
+    """
+    предоставляет набор методов для получения данных из базы
+    """
     def __init__(self, connection_string):
         self.__connection_string = connection_string
 
     def getAllSubjects(self):
+        """
+        возвращает список идентификаторов всех субъектов
+        """
         try:
             connection = sqlite3.connect(self.__connection_string)
             cursor = connection.cursor()
@@ -26,6 +32,9 @@ class Provider():
             connection.close()
 
     def getAllUnitsBySubjectId(self, subject_id):
+        """
+        возвращает список, отсортированных по дате создания, всех юнитов конкретного пользователя
+        """
         try:
             connection = sqlite3.connect(self.__connection_string)
             cursor = connection.cursor()
