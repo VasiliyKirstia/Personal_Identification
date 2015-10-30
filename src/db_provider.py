@@ -7,7 +7,7 @@ __author__ = 'vasiliy'
 
 
 import sqlite3
-from models import Unit, KEY_PRESS_UNIT_TYPE, KEY_RELEASE_UNIT_TYPE
+from models import Unit, KEY_PRESS_UNIT_TYPE, KEY_RELEASE_UNIT_TYPE, Input
 
 class Provider():
     """

@@ -1,32 +1,10 @@
 __author__ = 'vasiliy'
 
 from chapter_one.models import KeyActivation
-from models import KEY_PRESS_UNIT_TYPE, KEY_RELEASE_UNIT_TYPE
-from utils import remove_duplicates, remove_intermediate_pressing
 
 
-def get_key_activation_sequence(unit_sequence):
-    """ преобразует последовательность нажатий/отпусканий в последовательность активаций """
-    prepared_sequence = remove_intermediate_pressing(remove_duplicates(list(unit_sequence)))
-    result_sequence = list()
-
-    i = 0
-    while i < len(prepared_sequence):
-        current_unit = prepared_sequence[i]
-        if current_unit.type == KEY_RELEASE_UNIT_TYPE:
-            i += 1
-            continue
-
-        j = 0
-        while i + j < len(prepared_sequence):
-            if prepared_sequence[i + j].key_code == current_unit.key_code and prepared_sequence[i + j].type == KEY_RELEASE_UNIT_TYPE:
-                result_sequence.append(
-                    KeyActivation(current_unit.key_code, prepared_sequence[i + j].time_stamp - current_unit.time_stamp))
-                break
-            else:
-                j += 1
-        i += 1
-    return result_sequence
+def get_key_activation_sequence(input_sequence):
+    return [KeyActivation(_input.key_code, _input.key_release_time - _input.key_press_time) for _input in input_sequence]
 
 
 def get_average(key_activation_sequence):
