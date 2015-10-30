@@ -16,7 +16,7 @@ class Provider():
     def __init__(self, connection_string):
         self.__connection_string = connection_string
 
-    def getAllSubjects(self):
+    def get_all_subjects(self):
         """
         возвращает список идентификаторов всех субъектов
         """
@@ -31,7 +31,7 @@ class Provider():
         finally:
             connection.close()
 
-    def getAllUnitsBySubjectId(self, subject_id):
+    def get_all_units_by_subject_id(self, subject_id):
         """
         возвращает список, отсортированных по дате создания, всех юнитов конкретного пользователя
         """

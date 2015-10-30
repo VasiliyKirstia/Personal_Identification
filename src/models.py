@@ -23,4 +23,4 @@ class Unit:
         )
 
     def __eq__(self, other):
-        return self.key_code == other.key_code and self.type == other.type
+        return self.key_code == other.key_code and self.type == other.type and self.time_stamp == other.time_stamp

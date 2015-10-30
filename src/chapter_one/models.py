@@ -11,3 +11,6 @@ class KeyActivation:
             key=self.key,
             duration=self.activity_duration
         )
+
+    def __eq__(self, other):
+        return self.activity_duration == other.activity_duration and self.key == other.key
