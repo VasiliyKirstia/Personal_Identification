@@ -1,44 +1,44 @@
 __author__ = 'vasiliy'
-from chapter_one.utils import get_key_activation_sequence, get_average_key_activation, get_average_distance, \
-    get_distance_sequence, get_key_activation_dispersion, get_distance_dispersion
-from chapter_one.models import KeyActivation, Distance
+from chapter_one.utils import get_average_outer_distance, get_average_inner_distance, get_inner_distance_dispersion, \
+    get_outer_distance_sequence, get_outer_distance_dispersion, get_inner_distance_sequence
+from chapter_one.models import InnerDistance, OuterDistance
 from models import Input
 import unittest
 
-class TestGetKeyActivationSequence(unittest.TestCase):
-    def test_get_ka(self):
+class TestGetInnerDistanceSequence(unittest.TestCase):
+    def test_get_i_d(self):
         inputs = [
             Input(10, 1, 3),
             Input(11, 2.1, 4)
         ]
         self.assertEqual(
-            get_key_activation_sequence(inputs),
+            get_inner_distance_sequence(inputs),
             [
-                KeyActivation(10, 2),
-                KeyActivation(11, 1.9)
+                InnerDistance(10, 2),
+                InnerDistance(11, 1.9)
             ]
         )
 
-class TestGetAverageKeyActivation(unittest.TestCase):
+class TestGetAverageInnerDistance(unittest.TestCase):
     def test_get_a(self):
-        kas = [
-            KeyActivation(1, 1),
-            KeyActivation(2, 2),
-            KeyActivation(3, 4),
-            KeyActivation(2, 2),
-            KeyActivation(2, 2),
-            KeyActivation(1, 2),
-            KeyActivation(1, 2)
+        ids = [
+            InnerDistance(1, 1),
+            InnerDistance(2, 2),
+            InnerDistance(3, 4),
+            InnerDistance(2, 2),
+            InnerDistance(2, 2),
+            InnerDistance(1, 2),
+            InnerDistance(1, 2)
         ]
         self.assertEqual(
-            get_average_key_activation(kas),
+            get_average_inner_distance(ids),
             [
-                KeyActivation(1, 5/3.0),
-                KeyActivation(2, 2),
-                KeyActivation(3, 4)
+                InnerDistance(1, 5/3.0),
+                InnerDistance(2, 2),
+                InnerDistance(3, 4)
             ]
         )
-class TestGetDistanceSequence(unittest.TestCase):
+class TestGetOuterDistanceSequence(unittest.TestCase):
     def test_get_dist(self):
         inputs = [
             Input(10, 1, 3),
@@ -46,85 +46,85 @@ class TestGetDistanceSequence(unittest.TestCase):
             Input(12, 6, 8)
         ]
         self.assertEqual(
-            get_distance_sequence(inputs),
+            get_outer_distance_sequence(inputs),
             [
-                Distance(10, 11, -1),
-                Distance(11, 12, 2)
+                OuterDistance(10, 11, -1),
+                OuterDistance(11, 12, 2)
             ]
         )
 
-class TestGetAverageDistance(unittest.TestCase):
+class TestGetAverageOuterDistance(unittest.TestCase):
     def test_get_a(self):
         dists = [
-            Distance(10, 11, 2),
-            Distance(10, 11, 4),
-            Distance(12, 11, 2),
-            Distance(12, 11, 4),
-            Distance(1, 2, 2),
+            OuterDistance(10, 11, 2),
+            OuterDistance(10, 11, 4),
+            OuterDistance(12, 11, 2),
+            OuterDistance(12, 11, 4),
+            OuterDistance(1, 2, 2),
         ]
-        for item in get_average_distance(dists):
+        for item in get_average_outer_distance(dists):
             self.assertIn(
                 item,
                 [
-                    Distance(10,11,3),
-                    Distance(12,11,3),
-                    Distance(1,2,2)
+                    OuterDistance(10,11,3),
+                    OuterDistance(12,11,3),
+                    OuterDistance(1,2,2)
                 ]
             )
-    def test_get_a_count(self):
+    def test_get_a_o_d_count(self):
         dists = [
-            Distance(10, 11, 2),
-            Distance(10, 11, 4),
-            Distance(12, 11, 2),
-            Distance(12, 11, 4),
-            Distance(1, 2, 2),
+            OuterDistance(10, 11, 2),
+            OuterDistance(10, 11, 4),
+            OuterDistance(12, 11, 2),
+            OuterDistance(12, 11, 4),
+            OuterDistance(1, 2, 2),
         ]
-        self.assertEqual(3 , len(get_average_distance(dists)))
+        self.assertEqual(3 , len(get_average_outer_distance(dists)))
 
-class TestGetKeyActivationDispersion(unittest.TestCase):
-    def test_get_d(self):
-        kas = [
-            KeyActivation(1, 1),
-            KeyActivation(2, 2),
-            KeyActivation(3, 4),
-            KeyActivation(2, 2),
-            KeyActivation(2, 2),
-            KeyActivation(1, 2),
-            KeyActivation(1, 2)
+class TestGetInnerDistanceDispersion(unittest.TestCase):
+    def test_get_i_d(self):
+        ids = [
+            InnerDistance(1, 1),
+            InnerDistance(2, 2),
+            InnerDistance(3, 4),
+            InnerDistance(2, 2),
+            InnerDistance(2, 2),
+            InnerDistance(1, 2),
+            InnerDistance(1, 2)
         ]
         self.assertEqual(
-            get_key_activation_dispersion(kas),
+            get_inner_distance_dispersion(ids),
             [
-                KeyActivation(1, ( (1-5/3.0)**2 + (2-5/3.0)**2 + (2-5/3.0)**2 )/3.0),
-                KeyActivation(2, 0),
-                KeyActivation(3, 0)
+                InnerDistance(1, ( (1-5/3.0)**2 + (2-5/3.0)**2 + (2-5/3.0)**2 )/3.0),
+                InnerDistance(2, 0),
+                InnerDistance(3, 0)
             ]
         )
 
-class TestGetDistanceDispersion(unittest.TestCase):
-    def test_get_d(self):
+class TestGetOuterDistanceDispersion(unittest.TestCase):
+    def test_get_odd(self):
         dists = [
-            Distance(10, 11, 1),
-            Distance(10, 11, 4),
-            Distance(12, 11, 2),
-            Distance(12, 11, 4),
-            Distance(1, 2, 2),
+            OuterDistance(10, 11, 1),
+            OuterDistance(10, 11, 4),
+            OuterDistance(12, 11, 2),
+            OuterDistance(12, 11, 4),
+            OuterDistance(1, 2, 2),
         ]
-        for ad in get_distance_dispersion(dists):
-            self.assertIn(ad,
+        for odd in get_outer_distance_dispersion(dists):
+            self.assertIn(odd,
                 [
-                    Distance(10,11, (1.5**2 + 1.5**2) / 2.0),
-                    Distance(12,11, 1),
-                    Distance(1,2, 0)
+                    OuterDistance(10,11, (1.5**2 + 1.5**2) / 2.0),
+                    OuterDistance(12,11, 1),
+                    OuterDistance(1,2, 0)
                 ]
             )
 
-    def test_get_d_count(self):
+    def test_get_odd_count(self):
         dists = [
-            Distance(10, 11, 1),
-            Distance(10, 11, 4),
-            Distance(12, 11, 2),
-            Distance(12, 11, 4),
-            Distance(1, 2, 2),
+            OuterDistance(10, 11, 1),
+            OuterDistance(10, 11, 4),
+            OuterDistance(12, 11, 2),
+            OuterDistance(12, 11, 4),
+            OuterDistance(1, 2, 2),
         ]
-        self.assertEqual(3, len(get_distance_dispersion(dists)))
+        self.assertEqual(3, len(get_outer_distance_dispersion(dists)))

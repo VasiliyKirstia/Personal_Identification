@@ -1,22 +1,22 @@
 __author__ = 'vasiliy'
 
-class KeyActivation:
-    """  содержит информацию о том, как долго клавиша удерживалась нажатой   """
-    def __init__(self, key, activity_duration):
-        self.activity_duration = activity_duration
-        self.key = key
+class InnerDistance:
+    """  внутреннее растояние   """
+    def __init__(self, key_code, distance):
+        self.distance = distance
+        self.key_code = key_code
 
     def __str__(self):
-        return "{key} : {duration}ms".format(
-            key=self.key,
-            duration=self.activity_duration
+        return "{key} : {dist}ms".format(
+            key=self.key_code,
+            dist=self.distance
         )
 
     def __eq__(self, other):
-        return self.activity_duration == other.activity_duration and self.key == other.key
+        return self.distance == other.distance and self.key_code == other.key_code
 
-class Distance:
-    """ расстояние между нажатиями кнопок """
+class OuterDistance:
+    """ растояние между отпусканием n-й клавиши и нажатием n+1 """
     def __init__(self, key_code_from, key_code_to, distance):
         self.key_code_from = key_code_from
         self.key_code_to = key_code_to
