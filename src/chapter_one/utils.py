@@ -25,6 +25,21 @@ def get_average_key_activation(key_activation_sequence):
         result[key] = dictionary[key][0]/float(dictionary[key][1])
     return result
 
+def get_key_activation_dispersion(key_activation_sequence):
+    average_key_activation = get_average_key_activation(key_activation_sequence)
+    result = dict()
+    for key in average_key_activation.keys():
+        i = 0
+        current_value = 0
+        current_count = 0
+        while i <  len(key_activation_sequence):
+            if key_activation_sequence[i].key == key:
+                current_value += (key_activation_sequence[i].activity_duration - average_key_activation[key]) ** 2
+                current_count += 1
+            i += 1
+        result[key] = current_value/float(current_count)
+    return result
+
 def get_distance_sequence(input_sequence):
     dist_seq = list()
 
@@ -52,3 +67,6 @@ def get_average_distance(distance_sequence):
     for key in dictionary.keys():
         result[key] = dictionary[key][0]/float(dictionary[key][1])
     return result
+
+def get_distance_dispersion(distance_sequence):
+    pass

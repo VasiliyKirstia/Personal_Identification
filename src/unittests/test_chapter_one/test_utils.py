@@ -1,5 +1,6 @@
 __author__ = 'vasiliy'
-from chapter_one.utils import get_key_activation_sequence, get_average_key_activation, get_average_distance, get_distance_sequence
+from chapter_one.utils import get_key_activation_sequence, get_average_key_activation, get_average_distance, \
+    get_distance_sequence, get_key_activation_dispersion
 from chapter_one.models import KeyActivation, Distance
 from models import Input
 import unittest
@@ -21,7 +22,7 @@ class TestGetKeyActivationSequence(unittest.TestCase):
 class TestGetAverageKeyActivation(unittest.TestCase):
     def test_get_a(self):
         kas = [
-            KeyActivation(1, 2),
+            KeyActivation(1, 1),
             KeyActivation(2, 2),
             KeyActivation(3, 4),
             KeyActivation(2, 2),
@@ -32,7 +33,7 @@ class TestGetAverageKeyActivation(unittest.TestCase):
         self.assertDictEqual(
             get_average_key_activation(kas),
             {
-                1: 2,
+                1: 5/3.0,
                 2: 2,
                 3: 4
             }
@@ -67,5 +68,25 @@ class TestGetAverageDistance(unittest.TestCase):
                 (10,11):3,
                 (12,11):3,
                 (1,2):2
+            }
+        )
+
+class TestGetKeyActivationDispersion(unittest.TestCase):
+    def test_get_d(self):
+        kas = [
+            KeyActivation(1, 1),
+            KeyActivation(2, 2),
+            KeyActivation(3, 4),
+            KeyActivation(2, 2),
+            KeyActivation(2, 2),
+            KeyActivation(1, 2),
+            KeyActivation(1, 2)
+        ]
+        self.assertDictEqual(
+            get_key_activation_dispersion(kas),
+            {
+                1: ( (1-5/3.0)**2 + (2-5/3.0)**2 + (2-5/3.0)**2 )/3.0,
+                2: 0,
+                3: 0
             }
         )
