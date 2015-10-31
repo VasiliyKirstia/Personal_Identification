@@ -20,24 +20,24 @@ def get_average_key_activation(key_activation_sequence):
             dictionary[key_activation.key][1] += 1
         else:
             dictionary[key_activation.key] = [key_activation.activity_duration, 1]
-    result = dict()
+    result = list()
     for key in dictionary.keys():
-        result[key] = dictionary[key][0]/float(dictionary[key][1])
+        result.append( KeyActivation(key, dictionary[key][0]/float(dictionary[key][1])) )
     return result
 
 def get_key_activation_dispersion(key_activation_sequence):
     average_key_activation = get_average_key_activation(key_activation_sequence)
-    result = dict()
-    for key in average_key_activation.keys():
+    result = list()
+    for aka in average_key_activation:
         i = 0
         current_value = 0
         current_count = 0
         while i <  len(key_activation_sequence):
-            if key_activation_sequence[i].key == key:
-                current_value += (key_activation_sequence[i].activity_duration - average_key_activation[key]) ** 2
+            if key_activation_sequence[i].key == aka.key:
+                current_value += (key_activation_sequence[i].activity_duration - aka.activity_duration) ** 2
                 current_count += 1
             i += 1
-        result[key] = current_value/float(current_count)
+        result.append( KeyActivation(aka.key, current_value/float(current_count)) )
     return result
 
 def get_distance_sequence(input_sequence):
@@ -57,16 +57,29 @@ def get_distance_sequence(input_sequence):
 
 def get_average_distance(distance_sequence):
     dictionary = dict()
-    for distance in distance_sequence:
+    for distance in distance_sequence: #TODO избавиться от словаря с адовыми кортежами вместо ключей
         if (distance.key_code_from, distance.key_code_to) in dictionary.keys():
             dictionary[(distance.key_code_from, distance.key_code_to)][0] += distance.distance
             dictionary[(distance.key_code_from, distance.key_code_to)][1] += 1
         else:
             dictionary[(distance.key_code_from, distance.key_code_to)] = [distance.distance, 1]
-    result = dict()
+    result = list()
     for key in dictionary.keys():
-        result[key] = dictionary[key][0]/float(dictionary[key][1])
+        result.append( Distance(key[0], key[1], dictionary[key][0]/float(dictionary[key][1])) )
     return result
 
 def get_distance_dispersion(distance_sequence):
-    pass
+    average_distance = get_average_distance(distance_sequence)
+    result = list()
+
+    for ad in average_distance:
+        i = 0
+        current_value = 0
+        current_count = 0
+        while i <  len(distance_sequence):
+            if distance_sequence[i].key_code_from == ad.key_code_from and distance_sequence[i].key_code_to == ad.key_code_to:
+                current_value += (distance_sequence[i].distance - ad.distance) ** 2
+                current_count += 1
+            i += 1
+        result.append( Distance(ad.key_code_from, ad.key_code_to, current_value/float(current_count)) )
+    return result
