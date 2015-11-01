@@ -1,9 +1,11 @@
 __author__ = 'vasiliy'
 from chapter_one.utils import get_average_outer_distance, get_average_inner_distance, get_inner_distance_dispersion, \
-    get_outer_distance_sequence, get_outer_distance_dispersion, get_inner_distance_sequence
+    get_outer_distance_sequence, get_outer_distance_dispersion, get_inner_distance_sequence, \
+    get_inner_distance_standard_deviation, get_outer_distance_standard_deviation
 from chapter_one.models import InnerDistance, OuterDistance
 from models import Input
 import unittest
+import math
 
 class TestGetInnerDistanceSequence(unittest.TestCase):
     def test_get_i_d(self):
@@ -128,3 +130,52 @@ class TestGetOuterDistanceDispersion(unittest.TestCase):
             OuterDistance(1, 2, 2),
         ]
         self.assertEqual(3, len(get_outer_distance_dispersion(dists)))
+
+
+class TestGetInnerDistanceStandardDeviation(unittest.TestCase):
+    def test_get_id_sd(self):
+        ids = [
+            InnerDistance(1, 1),
+            InnerDistance(2, 2),
+            InnerDistance(3, 4),
+            InnerDistance(2, 2),
+            InnerDistance(2, 2),
+            InnerDistance(1, 2),
+            InnerDistance(1, 2)
+        ]
+        self.assertEqual(
+            get_inner_distance_standard_deviation(ids),
+            [
+                InnerDistance(1, math.sqrt( ((1-5/3.0)**2 + (2-5/3.0)**2 + (2-5/3.0)**2 )/3.0 )),
+                InnerDistance(2, 0),
+                InnerDistance(3, 0)
+            ]
+        )
+
+class TestGetOuterDistanceStandardDeviation(unittest.TestCase):
+    def test_get_odsd(self):
+        dists = [
+            OuterDistance(10, 11, 1),
+            OuterDistance(10, 11, 4),
+            OuterDistance(12, 11, 2),
+            OuterDistance(12, 11, 4),
+            OuterDistance(1, 2, 2),
+        ]
+        for odsd in get_outer_distance_standard_deviation(dists):
+            self.assertIn(odsd,
+                          [
+                              OuterDistance(10,11, math.sqrt((1.5**2 + 1.5**2) / 2.0)),
+                              OuterDistance(12,11, 1),
+                              OuterDistance(1,2, 0)
+                          ]
+                          )
+
+    def test_get_odd_count(self):
+        dists = [
+            OuterDistance(10, 11, 1),
+            OuterDistance(10, 11, 4),
+            OuterDistance(12, 11, 2),
+            OuterDistance(12, 11, 4),
+            OuterDistance(1, 2, 2),
+        ]
+        self.assertEqual(3, len(get_outer_distance_standard_deviation(dists)))

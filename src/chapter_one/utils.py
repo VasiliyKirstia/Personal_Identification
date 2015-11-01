@@ -1,6 +1,7 @@
 __author__ = 'vasiliy'
 
 from chapter_one.models import InnerDistance, OuterDistance
+import math
 
 
 def get_inner_distance_sequence(input_sequence):
@@ -40,6 +41,13 @@ def get_inner_distance_dispersion(inner_distance_sequence):
             i += 1
         result.append( InnerDistance(aid.key_code, current_value/float(current_count)) )
     return result
+
+
+def get_inner_distance_standard_deviation(inner_distance_sequence):
+    inner_distance_dispersion_list = get_inner_distance_dispersion(inner_distance_sequence)
+    for idd in inner_distance_dispersion_list:
+        idd.distance = math.sqrt(idd.distance)
+    return inner_distance_dispersion_list
 
 
 def get_outer_distance_sequence(input_sequence):
@@ -87,3 +95,10 @@ def get_outer_distance_dispersion(outer_distance_sequence):
             i += 1
         result.append( OuterDistance(ad.key_code_from, ad.key_code_to, current_value/float(current_count)) )
     return result
+
+
+def get_outer_distance_standard_deviation(outer_distance_sequence):
+    outer_distance_dispersion_list = get_outer_distance_dispersion(outer_distance_sequence)
+    for odd in outer_distance_dispersion_list:
+        odd.distance = math.sqrt(odd.distance)
+    return outer_distance_dispersion_list
