@@ -26,6 +26,9 @@ class Unit:
         return self.key_code == other.key_code and self.type == other.type and self.time_stamp == other.time_stamp
 
 class Input:
+    """
+    абстракция ввода одного символа с клавиатуры (нажатие и последующее отпускание)
+    """
     def __init__(self, key_code, key_press_time, key_release_time):
         self.key_code = key_code
         self. key_press_time = key_press_time
