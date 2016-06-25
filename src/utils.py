@@ -60,3 +60,28 @@ def get_inputs_sequence(unit_sequence, is_raw):
                 j += 1
         i += 1
     return input_sequence
+
+
+def get_inputs_sequence_from_messages_sequence(messages_sequence):
+    input_sequence = list()
+
+    for message in messages_sequence:
+        temp_seq = list()
+        i = 0
+        while i < len(message):
+            if message[i].type == KEY_RELEASE_UNIT_TYPE:
+                i += 1
+                continue
+
+            current_unit = message[i]
+
+            j = 1
+            while i + j < len(message):
+                if message[i + j].key_code == current_unit.key_code and message[i + j].type == KEY_RELEASE_UNIT_TYPE:
+                    temp_seq.append(Input(current_unit.key_code, current_unit.time_stamp, message[i + j].time_stamp))
+                    break
+                else:
+                    j += 1
+            i += 1
+        input_sequence.append(tuple(temp_seq))
+    return input_sequence

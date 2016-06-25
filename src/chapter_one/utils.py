@@ -1,11 +1,22 @@
 __author__ = 'vasiliy'
 
 from chapter_one.models import InnerDistance, OuterDistance
+from utils import get_inputs_sequence_from_messages_sequence
 import math
+
+MAX_PAUSE = 5000
 
 
 def get_inner_distance_sequence(input_sequence):
     return [InnerDistance(_input.key_code, _input.key_release_time - _input.key_press_time) for _input in input_sequence]
+
+
+def get_inner_distance_sequence_from_messages_sequence(messages_sequence):
+    inputs_seq = get_inputs_sequence_from_messages_sequence(messages_sequence)
+    result = list()
+    for _tuple in inputs_seq:
+        result += get_inner_distance_sequence(_tuple)
+    return result
 
 
 def get_average_inner_distance(inner_distance_sequence):
@@ -55,15 +66,23 @@ def get_outer_distance_sequence(input_sequence):
 
     i = 1
     while i < len(input_sequence):
-        dist_seq.append(
-            OuterDistance(
-                input_sequence[i - 1].key_code,
-                input_sequence[i].key_code,
-                input_sequence[i].key_press_time - input_sequence[i - 1].key_release_time
+        if input_sequence[i].key_press_time - input_sequence[i - 1].key_release_time < MAX_PAUSE:
+            dist_seq.append(
+                OuterDistance(
+                    input_sequence[i - 1].key_code,
+                    input_sequence[i].key_code,
+                    input_sequence[i].key_press_time - input_sequence[i - 1].key_release_time
+                )
             )
-        )
         i += 1
     return  dist_seq
+
+def get_outer_distance_sequence_from_messages_sequence(messages_sequence):
+    inputs_seq = get_inputs_sequence_from_messages_sequence(messages_sequence)
+    result = list()
+    for _tuple in inputs_seq:
+        result += get_outer_distance_sequence(_tuple)
+    return result
 
 
 def get_average_outer_distance(outer_distance_sequence):
